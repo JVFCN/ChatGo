@@ -47,17 +47,6 @@ func ButtonClicked(event subscription.ButtonReportInlineEvent) {
 			return
 		}
 	} else if Value == "gpt-3.5-turbo" {
-		_, err := Sends.SendTextMessage(UGid.MainId, UGid.MainType, "正在使用GPT-3.5 Turbo模式, 请等待回答")
-		if err != nil {
-			log.Println(err)
-			return
-		}
-		err = OpenAI.GetGPTAnswer(event.Value, UGid, event.MsgId)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-	} else if Value == "gpt-3.5-turbo" {
 		err := SQLite.UpdateUserModel(event.UserId, "gpt-3.5-turbo")
 		if err != nil {
 			log.Println(err)

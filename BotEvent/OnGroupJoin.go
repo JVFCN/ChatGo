@@ -24,6 +24,7 @@ func GroupJoin(event subscription.GroupJoinEvent) {
 		MainType: "group",
 		User:     event.UserId,
 		Group:    event.ChatId,
+		Name:     event.Nickname,
 	}
 
 	err = OpenAI.GetGPTAnswer("有一位新成员进入了我们的群聊,请你随机用一种方式和语气欢迎新成员"+UGid.Name+"的到来", UGid, MessageId)

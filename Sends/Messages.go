@@ -43,6 +43,17 @@ func EditTextMessage(msgId string, recvId string, recvType string, text string, 
 	return openApi.EditTextMessage(newTextMessage)
 }
 
+func SendMarkdownMessage(recvId string, recvType string, text string) (openapi.BasicResponse, error) {
+	_ = godotenv.Load("data/.env")
+	openApi := openapi.NewOpenApi(os.Getenv("TOKEN"))
+	markdownMessage := openapi.MarkdownMessage{
+		RecvId:   recvId,
+		RecvType: recvType,
+		Text:     text,
+	}
+	return openApi.SendMarkdownMessage(markdownMessage)
+}
+
 func SendImageMessage(recvId string, recvType string, Url string) (openapi.BasicResponse, error) {
 	_ = godotenv.Load("data/.env")
 	openApi := openapi.NewOpenApi(os.Getenv("TOKEN"))
@@ -50,6 +61,7 @@ func SendImageMessage(recvId string, recvType string, Url string) (openapi.Basic
 	content := map[string]interface{}{"imageUrl": Url}
 	return openApi.SendMessage(recvId, recvType, "image", content)
 }
+
 func BatchSendMessages(recvIds []string, recvType string, text string, buttons interface{}) {
 	_ = godotenv.Load("data/.env")
 	openApi := openapi.NewOpenApi(os.Getenv("TOKEN"))

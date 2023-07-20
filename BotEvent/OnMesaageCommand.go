@@ -57,7 +57,7 @@ func Command(event subscription.MessageEvent) {
 			_, err = Sends.SendTextMessage(UGid.MainId, UGid.MainType, "您的ApiKey为:"+Key)
 		}
 	} else if CommandName == "重置ApiKey" || CommandId == 371 {
-		err := SQLite.UpdateUserApiKey(SenderId, os.Getenv("DEFAULT_API"))
+		err := SQLite.UpdateUserApiKey(SenderId, "DefaultApiKey")
 		if err != nil {
 			log.Println(err)
 			return

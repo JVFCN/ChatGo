@@ -31,7 +31,7 @@ func CreateImage(UGid Type.Id, Prompt string) (string, error) {
 		Transport: transport,
 	}
 
-	config.BaseURL = "https://api.mctools.online/v1"
+	config.BaseURL = Type.Base
 	Client = openai.NewClientWithConfig(config)
 	ctx := context.Background()
 

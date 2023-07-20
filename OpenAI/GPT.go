@@ -49,25 +49,27 @@ func GetGPTAnswer(Prompt string, UGid Type.Id, MsgId string) error {
 					return nil
 				} else {
 					fmt.Println("Premium")
-					err := Answer(Prompt, UGid, MsgId)
+					err := answer(Prompt, UGid, MsgId)
 					if err != nil {
 						return err
 					}
-
 				}
 			}
 		}
-	} else {
-		fmt.Println("NoPremium")
-		err := Answer(Prompt, UGid, MsgId)
+		err := SQLite.UpdateUserFreeTimes(UGid.User, SQLite.GetUserFreeTimes(UGid.User)-1)
 		if err != nil {
 			return err
 		}
 	}
+	fmt.Println("NoPremium")
+	err = answer(Prompt, UGid, MsgId)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
-func Answer(Prompt string, UGid Type.Id, MsgId string) error {
+func answer(Prompt string, UGid Type.Id, MsgId string) error {
 	ApiKey, err := SQLite.GetUserApiKey(UGid.User)
 	var Client *openai.Client
 	config := openai.DefaultConfig("")
@@ -87,7 +89,7 @@ func Answer(Prompt string, UGid Type.Id, MsgId string) error {
 		Transport: transport,
 	}
 
-	config.BaseURL = "https://api.mctools.online/v1"
+	config.BaseURL = Type.Base
 	Client = openai.NewClientWithConfig(config)
 
 	Messages, err := SQLite.GetUserContext(UGid.User)

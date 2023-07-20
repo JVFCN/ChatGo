@@ -62,7 +62,7 @@ func Normal(event subscription.MessageEvent) {
 				if ChatType == "group" && FindAt(StringValue) == false {
 					return
 				}
-				Response, err := Sends.SendTextMessage(UGid.MainId, UGid.MainType, "正在思考中...")
+				Response, err := Sends.SendMarkdownMessage(UGid.MainId, UGid.MainType, "正在思考中...")
 				if err != nil {
 					return
 				}
@@ -119,6 +119,10 @@ func RunCommand(CommandName, CommandContent, Type string, UGid Type.Id) error {
 		AdminCommand.CutSu(UGid, CommandContent)
 	} else if CommandName == "Send" {
 		AdminCommand.Send(CommandContent, UGid)
+	} else if CommandName == "SetFree" {
+		AdminCommand.SetFree(UGid, CommandContent)
+	} else if CommandName == "free" {
+		UserCommand.CheckFreeTimes(UGid)
 	}
 	return nil
 }

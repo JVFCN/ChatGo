@@ -17,6 +17,7 @@ func GroupLeave(event subscription.GroupLeaveEvent) {
 		MainType: "group",
 		User:     event.UserId,
 		Group:    event.ChatId,
+		Name:     event.Nickname,
 	}
 
 	err = OpenAI.GetGPTAnswer("有一位成员退出了我们的群聊,请你随机用一种方式和语气送别"+UGid.Name+"这位成员", UGid, MessageId)

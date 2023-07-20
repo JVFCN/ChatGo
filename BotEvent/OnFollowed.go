@@ -24,6 +24,7 @@ func Followed(event subscription.BotFollowedEvent) {
 		MainType: "user",
 		User:     event.UserId,
 		Group:    event.ChatId,
+		Name:     event.Nickname,
 	}
 
 	err = OpenAI.GetGPTAnswer("有一位新成员添加了你的好友,请你随机用一种方式和语气欢迎新成员"+UGid.Name+"的到来, 并简单介绍自己", UGid, MessageId)
