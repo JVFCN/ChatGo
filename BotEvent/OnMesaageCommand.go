@@ -17,6 +17,12 @@ func Command(event subscription.MessageEvent) {
 	SenderId := event.Sender.SenderId
 	ChatType := event.Chat.ChatType
 
+	if ChatType == "bot" {
+		ChatType = "user"
+	} else {
+		ChatType = "group"
+	}
+
 	UGid := Type.Id{}
 	if ChatType == "group" {
 		UGid = Type.Id{

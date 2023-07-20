@@ -17,18 +17,25 @@ func Normal(event subscription.MessageEvent) {
 	SendContent := event.Message.Content
 	ChatType := event.Chat.ChatType
 	UGid := Type.Id{}
-	if ChatType == "user" {
+
+	if ChatType == "bot" {
+		ChatType = "user"
+	} else {
+		ChatType = "group"
+	}
+
+	if ChatType == "group" {
 		UGid = Type.Id{
-			MainId:   event.Sender.SenderId,
-			MainType: event.Sender.SenderType,
+			MainId:   event.Chat.ChatId,
+			MainType: event.Chat.ChatType,
 			User:     event.Sender.SenderId,
 			Group:    event.Chat.ChatId,
 			Name:     event.Sender.SenderNickname,
 		}
 	} else {
 		UGid = Type.Id{
-			MainId:   event.Chat.ChatId,
-			MainType: event.Chat.ChatType,
+			MainId:   event.Sender.SenderId,
+			MainType: event.Sender.SenderType,
 			User:     event.Sender.SenderId,
 			Group:    event.Chat.ChatId,
 			Name:     event.Sender.SenderNickname,
