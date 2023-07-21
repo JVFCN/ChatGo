@@ -6,8 +6,6 @@ import (
 	"context"
 	"github.com/sashabaranov/go-openai"
 	"log"
-	"net/http"
-	"net/url"
 	"os"
 )
 
@@ -20,16 +18,16 @@ func CreateImage(UGid Type.Id, Prompt string) (string, error) {
 	} else {
 		config = openai.DefaultConfig(ApiKey)
 	}
-	ProxyUrl, err := url.Parse(os.Getenv("PROXY"))
-	if err != nil {
-		return "", err
-	}
-	transport := &http.Transport{
-		Proxy: http.ProxyURL(ProxyUrl),
-	}
-	config.HTTPClient = &http.Client{
-		Transport: transport,
-	}
+	//ProxyUrl, err := url.Parse(os.Getenv("PROXY"))
+	//if err != nil {
+	//	return "", err
+	//}
+	//transport := &http.Transport{
+	//	Proxy: http.ProxyURL(ProxyUrl),
+	//}
+	//config.HTTPClient = &http.Client{
+	//	Transport: transport,
+	//}
 
 	config.BaseURL = Type.Base
 	Client = openai.NewClientWithConfig(config)

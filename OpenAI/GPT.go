@@ -11,8 +11,6 @@ import (
 	"github.com/sashabaranov/go-openai"
 	"github.com/yhchat/bot-go-sdk/openapi"
 	"log"
-	"net/http"
-	"net/url"
 	"os"
 	"time"
 )
@@ -78,16 +76,16 @@ func answer(Prompt string, UGid Type.Id, MsgId string) error {
 	} else {
 		config = openai.DefaultConfig(ApiKey)
 	}
-	ProxyUrl, err := url.Parse(os.Getenv("PROXY"))
-	if err != nil {
-		return err
-	}
-	transport := &http.Transport{
-		Proxy: http.ProxyURL(ProxyUrl),
-	}
-	config.HTTPClient = &http.Client{
-		Transport: transport,
-	}
+	//ProxyUrl, err := url.Parse(os.Getenv("PROXY"))
+	//if err != nil {
+	//	return err
+	//}
+	//transport := &http.Transport{
+	//	Proxy: http.ProxyURL(ProxyUrl),
+	//}
+	//config.HTTPClient = &http.Client{
+	//	Transport: transport,
+	//}
 
 	config.BaseURL = Type.Base
 	Client = openai.NewClientWithConfig(config)
