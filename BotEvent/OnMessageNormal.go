@@ -52,6 +52,7 @@ func Normal(event subscription.MessageEvent) {
 		if StringValue, Ok := Value.(string); Ok {
 			FirstChar := StringValue[0]
 			if FirstChar == '.' {
+				log.Println("[ChatGo]"+UGid.Name+"使用了用户命令:", Value.(string))
 				CommandName, CommandContent := PartUserCommand(Value.(string))
 				err := RunCommand(CommandName, CommandContent, ChatType, UGid)
 				if err != nil {
@@ -59,6 +60,7 @@ func Normal(event subscription.MessageEvent) {
 					return
 				}
 			} else if FirstChar == '!' {
+				log.Println("[ChatGo]"+UGid.Name+"使用了管理员命令:", Value.(string))
 				CommandName, CommandContent := PartAdminCommand(Value.(string))
 				err := RunCommand(CommandName, CommandContent, ChatType, UGid)
 				if err != nil {
@@ -74,6 +76,7 @@ func Normal(event subscription.MessageEvent) {
 					return
 				}
 				MessageId := Response.Data.(map[string]interface{})["messageInfo"].(map[string]interface{})["msgId"].(string)
+				log.Println("[ChatGo]"+UGid.Name+"MessageId:", MessageId)
 				err = OpenAI.GetGPTAnswer(StringValue, UGid, MessageId)
 				if err != nil {
 					log.Println(err)

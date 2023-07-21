@@ -7,6 +7,7 @@ import (
 )
 
 func Init() {
+	log.Println("Initializing SQLite database...")
 	db, err := sql.Open("sqlite3", "data/UsersInfo.db")
 	if err != nil {
 		log.Println(err)
@@ -36,5 +37,6 @@ func Init() {
 	_, err = db.Exec(Init)
 	if err != nil {
 		log.Println(err)
+		return
 	}
 }

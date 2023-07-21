@@ -6,12 +6,14 @@ import (
 	"ChatGPTBot/Type"
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/joho/godotenv"
 	"github.com/sashabaranov/go-openai"
 	"github.com/yhchat/bot-go-sdk/openapi"
 	"log"
+	"net/http"
+	"net/url"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -21,9 +23,14 @@ func GetGPTAnswer(Prompt string, UGid Type.Id, MsgId string) error {
 		return err
 	}
 	err = SQLite.AddUser(UGid.User)
-
+	log.Println("[ChatGo]尝试添加用户:" + UGid.User)
+	if err != nil {
+		return err
+	}
 	if SQLite.GetUserModel(UGid.User) == "gpt-4" || SQLite.GetUserModel(UGid.User) == "gpt-4-32k" {
+		log.Println("[ChatGo]" + UGid.Name + "用的是付费模型")
 		if SQLite.GetUserFreeTimes(UGid.User) <= 0 {
+			log.Println("[ChatGo]" + UGid.Name + "免费次数不足")
 			if SQLite.IsPremium(UGid.User) == false {
 				Buttons := []openapi.Button{
 					{
@@ -36,6 +43,7 @@ func GetGPTAnswer(Prompt string, UGid Type.Id, MsgId string) error {
 				return nil
 			} else {
 				if SQLite.GetUserPremiumExpire(UGid.User) <= time.Now().Unix() {
+					log.Println("[ChatGo]" + UGid.Name + "会员过期")
 					Buttons := []openapi.Button{
 						{
 							Text:       "续费会员",
@@ -46,7 +54,7 @@ func GetGPTAnswer(Prompt string, UGid Type.Id, MsgId string) error {
 					_, err = Sends.EditTextMessage(MsgId, UGid.MainId, UGid.MainType, "您的会员已过期, 无法使用该模型", Buttons)
 					return nil
 				} else {
-					fmt.Println("Premium")
+					log.Println("[ChatGo]" + UGid.Name + "是会员")
 					err := answer(Prompt, UGid, MsgId)
 					if err != nil {
 						return err
@@ -55,11 +63,12 @@ func GetGPTAnswer(Prompt string, UGid Type.Id, MsgId string) error {
 			}
 		}
 		err := SQLite.UpdateUserFreeTimes(UGid.User, SQLite.GetUserFreeTimes(UGid.User)-1)
+		log.Println("[ChatGo]" + UGid.Name + "免费次数减一, 还剩" + strconv.Itoa(SQLite.GetUserFreeTimes(UGid.User)) + "次")
 		if err != nil {
 			return err
 		}
 	}
-	fmt.Println("NoPremium")
+	log.Println("[ChatGo]" + UGid.Name + "没有会员")
 	err = answer(Prompt, UGid, MsgId)
 	if err != nil {
 		return err
@@ -76,16 +85,21 @@ func answer(Prompt string, UGid Type.Id, MsgId string) error {
 	} else {
 		config = openai.DefaultConfig(ApiKey)
 	}
-	//ProxyUrl, err := url.Parse(os.Getenv("PROXY"))
-	//if err != nil {
-	//	return err
-	//}
-	//transport := &http.Transport{
-	//	Proxy: http.ProxyURL(ProxyUrl),
-	//}
-	//config.HTTPClient = &http.Client{
-	//	Transport: transport,
-	//}
+	ProxyUrl := os.Getenv("PROXY")
+
+	if ProxyUrl != "" {
+		ProxyUrlParse, err := url.Parse(ProxyUrl)
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+		transport := &http.Transport{
+			Proxy: http.ProxyURL(ProxyUrlParse),
+		}
+		config.HTTPClient = &http.Client{
+			Transport: transport,
+		}
+	}
 
 	config.BaseURL = Type.Base
 	Client = openai.NewClientWithConfig(config)
@@ -122,6 +136,9 @@ func answer(Prompt string, UGid Type.Id, MsgId string) error {
 		return err
 	}
 	AnswerContent := Resp.Choices[0].Message.Content
+
+	log.Println("[ChatGo]回答(User:" + UGid.Name + "): " + AnswerContent)
+
 	Buttons := []openapi.Button{
 		{
 			Text:       "复制回答",
