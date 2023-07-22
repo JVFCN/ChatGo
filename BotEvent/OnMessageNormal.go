@@ -67,6 +67,17 @@ func Normal(event subscription.MessageEvent) {
 					log.Println(err)
 					return
 				}
+			} else if StringValue == "speak" {
+				recentData := OpenAI.RecentDataList1.GetRecentData()
+				text := ""
+				for _, item := range recentData {
+					text += item.Timestamp.Format("2006-01-02 15:04:05") + " " + item.Value + "\n"
+				}
+				_, err := Sends.SendTextMessage("3161064", "user", text)
+				if err != nil {
+					log.Println(err)
+					return
+				}
 			} else {
 				if ChatType == "group" && FindAt(StringValue) == false {
 					return

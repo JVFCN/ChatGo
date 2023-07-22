@@ -17,6 +17,8 @@ import (
 	"time"
 )
 
+var RecentDataList1 = RecentDataList{}
+
 func GetGPTAnswer(Prompt string, UGid Type.Id, MsgId string) error {
 	err := godotenv.Load("data/.env")
 	if err != nil {
@@ -157,6 +159,8 @@ func answer(Prompt string, UGid Type.Id, MsgId string) error {
 		},
 	}
 
+	RecentDataList1.AddDataItem(DataItem{Timestamp: time.Now(), Value: UGid.Name + " 问:" + Prompt})
+
 	_, err = Sends.EditTextMessage(MsgId, UGid.MainId, UGid.MainType, AnswerContent, Buttons)
 	if err != nil {
 		return err
@@ -191,4 +195,30 @@ func answer(Prompt string, UGid Type.Id, MsgId string) error {
 		return err
 	}
 	return nil
+}
+
+func (rdl *RecentDataList) AddDataItem(item DataItem) {
+	rdl.data = append(rdl.data, item)
+}
+
+func (rdl *RecentDataList) GetRecentData() []DataItem {
+	var recentData []DataItem
+	oneHourAgo := time.Now().Add(-time.Hour)
+
+	for _, item := range rdl.data {
+		if item.Timestamp.After(oneHourAgo) {
+			recentData = append(recentData, item)
+		}
+	}
+
+	return recentData
+}
+
+type DataItem struct {
+	Timestamp time.Time
+	Value     string
+}
+
+type RecentDataList struct {
+	data []DataItem
 }
