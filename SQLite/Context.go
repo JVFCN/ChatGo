@@ -4,7 +4,7 @@ import (
 	"ChatGPTBot/Type"
 	"database/sql"
 	"encoding/json"
-	"fmt"
+	"log"
 )
 
 func GetUserContext(UserId string) ([]Type.Data, error) {
@@ -28,10 +28,9 @@ func GetUserContext(UserId string) ([]Type.Data, error) {
 
 	var data []Type.Data
 	if err := json.Unmarshal([]byte(Context), &data); err != nil {
-		fmt.Println("Error parsing JSON:", err)
+		log.Println("Error parsing JSON:", err)
 		return nil, err
 	}
-	fmt.Println(data)
 	return data, nil
 }
 

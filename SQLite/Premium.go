@@ -5,7 +5,7 @@ import (
 )
 
 func IsPremium(UserId string) bool {
-	db, err := sql.Open("sqlite3", "UsersInfo.db")
+	db, err := sql.Open("sqlite3", "data/UsersInfo.db")
 	if err != nil {
 		return false
 	}
