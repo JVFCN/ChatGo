@@ -10,7 +10,7 @@ var rootCmd = &cobra.Command{
 	Use:   "ChatBotCLI",
 	Short: "ChatBotCLI可以帮助你快速的创建云湖ChatGPT机器人",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("version: 1.0.0")
+		fmt.Println("version: 1.0.1")
 		fmt.Println(cmd.Help())
 	},
 }
