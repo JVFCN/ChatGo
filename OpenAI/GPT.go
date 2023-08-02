@@ -26,10 +26,11 @@ func GetGPTAnswer(Prompt string, UGid Type.Id, MsgId string) error {
 	}
 	err = SQLite.AddUser(UGid.User)
 	log.Println("[ChatGo]尝试添加用户:" + UGid.User)
+	Model := SQLite.GetUserModel(UGid.User)
 	if err != nil {
 		return err
 	}
-	if SQLite.GetUserModel(UGid.User) == "gpt-4" || SQLite.GetUserModel(UGid.User) == "gpt-4-32k" {
+	if Model == "gpt-4" || Model == "gpt-4-32k" || Model == "gpt-3.5-turbo" || Model == "gpt-3.5-turbo-16k" {
 		log.Println("[ChatGo]" + UGid.Name + "用的是付费模型")
 		if SQLite.GetUserFreeTimes(UGid.User) <= 0 {
 			log.Println("[ChatGo]" + UGid.Name + "免费次数不足")
