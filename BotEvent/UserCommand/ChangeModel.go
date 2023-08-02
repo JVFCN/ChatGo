@@ -20,12 +20,12 @@ func ChangeModel(Type string, UGid Type.Id) {
 			Value:      "gpt-4-32k",
 		},
 		{
-			Text:       "GPT-3-turbo",
+			Text:       "GPT-3.5-turbo",
 			ActionType: 3,
 			Value:      "gpt-3.5-turbo",
 		},
 		{
-			Text:       "GPT-3-turbo-16k",
+			Text:       "GPT-3.5-turbo-16k",
 			ActionType: 3,
 			Value:      "gpt-3.5-turbo-16k",
 		},
