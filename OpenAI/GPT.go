@@ -148,6 +148,8 @@ func answer(Prompt string, UGid Type.Id, MsgId string) error {
 
 	if err != nil {
 		log.Printf("ChatCompletion error: %v\n", err)
+
+		Sends.EditTextMessage(MsgId, UGid.MainId, UGid.MainType, "发生错误:" + err , nil)
 		return err
 	}
 	AnswerContent := Resp.Choices[0].Message.Content
@@ -156,7 +158,7 @@ func answer(Prompt string, UGid Type.Id, MsgId string) error {
 
 	Buttons := []openapi.Button{
 		{
-			Text:       "复制回答",
+			Text:       "复制回oice答",
 			ActionType: 2,
 			Value:      AnswerContent,
 		},
