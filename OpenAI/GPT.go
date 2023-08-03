@@ -64,11 +64,12 @@ func GetGPTAnswer(Prompt string, UGid Type.Id, MsgId string) error {
 					}
 				}
 			}
-		}
-		err := SQLite.UpdateUserFreeTimes(UGid.User, SQLite.GetUserFreeTimes(UGid.User)-1)
-		log.Println("[ChatGo]" + UGid.Name + "免费次数减一, 还剩" + strconv.Itoa(SQLite.GetUserFreeTimes(UGid.User)) + "次")
-		if err != nil {
-			return err
+		} else if SQLite.IsPremium(UGid.User) == false && SQLite.GetUserPremiumExpire(UGid.User) < time.Now().Unix() {
+			err := SQLite.UpdateUserFreeTimes(UGid.User, SQLite.GetUserFreeTimes(UGid.User)-1)
+			log.Println("[ChatGo]" + UGid.Name + "免费次数减一, 还剩" + strconv.Itoa(SQLite.GetUserFreeTimes(UGid.User)) + "次")
+			if err != nil {
+				return err
+			}
 		}
 	}
 	log.Println("[ChatGo]" + UGid.Name + "没有会员")
