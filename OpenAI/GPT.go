@@ -149,7 +149,10 @@ func answer(Prompt string, UGid Type.Id, MsgId string) error {
 	if err != nil {
 		log.Printf("ChatCompletion error: %v\n", err)
 
-		Sends.EditTextMessage(MsgId, UGid.MainId, UGid.MainType, "发生错误:" + err , nil)
+		_, err = Sends.EditTextMessage(MsgId, UGid.MainId, UGid.MainType, "发生错误:" + err , nil)
+		if err != nil {
+			return err
+		}
 		return err
 	}
 	AnswerContent := Resp.Choices[0].Message.Content
