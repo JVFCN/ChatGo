@@ -155,7 +155,7 @@ func answer(Prompt string, UGid Type.Id, MsgId string) error {
 		}
 		return err
 	}
-	AnswerContent := Resp.Choices[0].Message.Content
+	AnswerContent := "[" + SQLite.GetUserModel(UGid.User) + "]:\n" + Resp.Choices[0].Message.Content
 
 	log.Println("[ChatGo]回答(User:" + UGid.Name + "): " + AnswerContent)
 
