@@ -141,7 +141,7 @@ func answer(Prompt string, UGid Type.Id, MsgId string) error {
 	Resp, err := Client.CreateChatCompletion(
 		context.Background(),
 		openai.ChatCompletionRequest{
-			Model:    openai.GPT3Dot5Turbo,
+			Model:    SQLite.GetUserModel(UGid.User),
 			Messages: AllMsg,
 		},
 	)
