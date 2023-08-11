@@ -155,7 +155,7 @@ func answer(Prompt string, UGid Type.Id, MsgId string) error {
 		}
 		return err
 	}
-	AnswerContent := "[" + SQLite.GetUserModel(UGid.User) + "]:\n" + Resp.Choices[0].Message.Content
+	AnswerContent := Resp.Choices[0].Message.Content
 
 	log.Println("[ChatGo]回答(User:" + UGid.Name + "): " + AnswerContent)
 
@@ -221,12 +221,10 @@ func (rdl *RecentDataList) AddDataItem(item DataItem) {
 
 func (rdl *RecentDataList) GetRecentData() []DataItem {
 	var recentData []DataItem
-	oneHourAgo := time.Now().Add(-time.Hour)
+	//oneHourAgo := time.Now().Add(-time.Hour)
 
 	for _, item := range rdl.data {
-		if item.Timestamp.After(oneHourAgo) {
-			recentData = append(recentData, item)
-		}
+		recentData = append(recentData, item)
 	}
 
 	return recentData
