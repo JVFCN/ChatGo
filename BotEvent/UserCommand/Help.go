@@ -16,12 +16,7 @@ const HelpContent = `1.输入.clear清空上下文(上下文保存三段对话)
 1. !SetBoard
 2. !SetModel
 3  !SetPre
-4. !post
-
-开发者云湖ID:3161064, 邮箱:j3280891657@gmail.com
-关于付费版:本机器人免费10次试用机会, 用完需要付费
-价格:10元/月,25元/季度,100元/年(无限制使用GPT4模型, 以及GPT4-32K模型)
-注意:付费后请联系开发者,并发送付费截图,以便开通权限`
+4. !post`
 
 func Help(Type string, UGid Type.Id) {
 	_, err := Sends.SendTextMessage(UGid.MainId, Type, HelpContent)
