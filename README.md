@@ -1,6 +1,7 @@
 # ChatGo 运行于[云湖](https://yhchat.com)上的智能助手
 该项目可实现大部分ChatGPT的操作(上下文, 清除记忆, 快捷复制等)  
-部署起来也十分方便, `data/.env`文件示例:  
+部署起来也十分方便, **可当作智能助手类机器人的框架使用**  
+`data/.env`文件示例:  
 ```
 TOKEN=云湖机器人Token  
 DEFAULT_API=默认API(可使用chatbot --base命令切换API代理)  
